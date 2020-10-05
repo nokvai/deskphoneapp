@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>About Monster VoIP</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">About Monster VoIP Desktop Phone</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+          <p style="text-align: center;">
+              <b>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <a id="linkTermsAndCondition" href="">Terms and Condition</a>
+                  <br>
+                  <br>
+                  <a id="linkTermsOfService" href="">Terms of Service</a>
+                  <br>
+                  <br>
+                  <a id="linkPrivacyPolicy" href="">Privacy Policy</a>
+                  <br>
+              </b>
+          </p>
+        </div>
+      </div>
+      <div class="row" style="position: fixed; bottom: 0; width: 100%; padding: 10px; margin-top: 10px;">
+        <div class="col-12" style="text-align: center;">
+          <small>Monster VoIP Desktop Phone - version <b id="app_version"></b></small>
+          <!-- <button id="btnPortal" class="btn btn-success btn-ripple">PBX Portal</button>
+          <button id="btnAttendant" class="btn btn-warning btn-ripple">Attendant Console</button>
+          <button id="btnMeeting" class="btn btn-primary btn-ripple">Meeting</button> -->
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      $(document).ready(() => {
+          var appVersion = require('electron').remote.app.getVersion();
+          $('#app_version').text(appVersion);
+
+          $('#linkTermsAndCondition').click(()=> {
+              require("electron").shell.openExternal('https://monstervoip.com/terms-and-conditions/');
+          })
+
+          $('#linkTermsOfService').click(()=> {
+              require("electron").shell.openExternal('https://monstervoip.com/terms-of-service/');
+          })
+
+          $('#linkPrivacyPolicy').click(()=> {
+              require("electron").shell.openExternal('https://monstervoip.com/privacy-policy/');
+          })
+      })
+    </script>
+  </body>
+</html>

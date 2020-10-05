@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Auto Signin</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <style>
+        body {
+          font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+          color: #404040;
+          background: #2a2a2a;
+        }
+
+        .card-style {
+          border: 1.2px solid rgba(171, 181, 184, 1);
+          box-shadow: 0px 1px 4px 0px rgba(85,95,99,0.2);
+        }
+        
+        .container {
+          margin: 10px auto;
+          width: 100%;
+          text-align: center;
+        }
+        
+        .container .progress {
+          margin: 0 auto;
+          width: 100%;
+        }
+        
+        .progress {
+          padding: 2px;
+          background: rgba(0, 0, 0, 0.25);
+          border-radius: 6px;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+        }
+        
+        .progress-bar {
+          height: 12px;
+          border-radius: 4px;
+          background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+          transition: 0.4s linear;
+          transition-property: width, background-color;
+          box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+        }
+           
+        .label {
+          display: inline-block;
+          margin: 0 5px 20px;
+          padding: 3px 8px;
+          text-shadow: 0 1px black;
+          border-radius: 3px;
+          cursor: pointer;
+          
+        }
+         
+      </style>
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style titlebar" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">Monster VoIP Desktop Phone</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-md-12" style="margin: 20px;">
+                        <div class="container">
+                            <label class="label">Signing In to Monster VoIP Desktop Phone...</label>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 0%;"></div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+     
+    <script>
+        var timeleft = 5;
+        var downloadTimer = setInterval(function(){
+            if(timeleft <= 0){
+                clearInterval(downloadTimer);
+            } 
+            if (timeleft == 5) {
+              $('.progress-bar').css({"width": "5%", "background-color": "#f63a0f"})
+            } else if (timeleft == 4) {
+              $('.progress-bar').css({"width": "25%", "background-color": "#f27011"})
+            } else if (timeleft == 3) {
+              $('.progress-bar').css({"width": "50%", "background-color": "#f2b01e"})
+            } else if (timeleft == 2) {
+              $('.progress-bar').css({"width": "75%", "background-color": "#f2d31b"})
+            } else if (timeleft == 1) {
+              $('.progress-bar').css({"width": "100%", "background-color": "#86e01e"})
+            }
+           
+              timeleft -= 1;
+            if (timeleft == -1) { window.close(); }
+        }, 500);
+    </script>
+  </body>
+</html>

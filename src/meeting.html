@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Meetings</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">Monster VoIP Desktop Phone</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+            <webview id="webview2"
+                src="https://login.monstervoip.com/video/" 
+                preload="preloadmeeting.js" 
+                style="position:relative;width:100%;height:100vh;" 
+                disablewebsecurity
+                webpreferences="nativeWindowOpen=yes" allowpopups>
+            </webview>
+            <!-- <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-md-12" style="margin: 20px;"> 
+                      <div class="form-group"> 
+                          <label for="txtMeetingId">Enter Meeting ID</label> 
+                          <input type="text" style="text-align: center;" id="txtMeetingId" name="meetingid" placeholder="Meeting ID" class="form-control" aria-label="meetingid" aria-describedby="inputGroup-sizing-default">
+                          <small>Meeting ID required (Minimum of 7 characters)</small>
+                      </div>  
+                      <br>
+                      <button id="btnGenerateMeetingId" class="btn btn-outline-primary">Generate ID</button>  
+                      <button id="btnOpenMeeting" class="btn btn-info" style="display: none;">Join Meeting</button>
+                    </div>
+                </div> 
+            </div> -->
+           
+        </div>
+      </div>
+    </div>
+    <script src="manipulatemeeting.js"></script>
+  </body>
+</html>

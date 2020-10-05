@@ -1,0 +1,179 @@
+body {
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; */
+  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+  color: #404040;
+}
+
+.titlebar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+button {
+	-webkit-app-region: no-drag;
+	border-radius: 20px !important;
+}
+ 
+.btn-ripple:hover {
+	border-color: rgba(255,255,255,1);
+	border-radius: 30px !important;
+	border: 6px solid #81d9ff;
+	position: relative;
+	bottom: 5px;
+}
+
+.btn-ripple {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	transition: all ease-in-out .5s;
+}
+
+.btn-ripple::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 25%;
+	height: 100%;
+	width: 50%;
+	background-color: #000;
+	border-radius: 50%;
+	opacity: 0;
+	pointer-events: none;
+	transition: all ease-in-out 1s;
+	transform: scale(5, 5);
+}
+
+.btn-ripple:active::after {
+	padding: 0;
+	margin: 0;
+	opacity: .2;
+	transition: 0s;
+	transform: scale(0, 0);
+}
+
+ 
+.card-style {
+  /* border: 1.2px solid rgba(171, 181, 184, 1);
+  box-shadow: 0px 1px 4px 0px rgba(85,95,99,0.2); */
+}
+
+.x {
+	-webkit-app-region: no-drag;
+	position: relative;
+	width: 23px;
+	height: 23px;
+	border: 2px solid #eef5df;
+	background-color: #ff5248;
+	border-radius: 50%;
+	}
+.x::before, .x::after {
+	position: absolute;
+	top: 8px;
+	left: 3.3px;
+	width: 13px;
+	height: 3px;
+	content: "";
+	background-color: #eef5df;
+	display: none;
+	}
+.x::before {
+	-ms-transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	}
+.x::after {
+	-ms-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	}
+.x:hover { cursor: pointer; }
+.x:hover::before, .x:hover::after { display: block; }
+
+.min {
+	-webkit-app-region: no-drag;
+	position: relative;
+	width: 23px;
+	height: 23px;
+	border: 2px solid #eef5df;
+	background-color: #93BF35;
+	border-radius: 50%;
+	}
+.min::before, .x::after {
+	position: absolute;
+	top: 8px;
+	left: 3.3px;
+	width: 13px;
+	height: 3px;
+	content: "";
+	background-color: #eef5df;
+	display: none;
+	}
+.min::before {
+	-ms-transform: rotate(-0deg);
+	-webkit-transform: rotate(-0deg);
+	transform: rotate(-0deg);
+	}
+ 
+.min:hover { cursor: pointer; }
+.min:hover::before { display: block; }
+
+.max {
+	-webkit-app-region: no-drag;
+	position: relative;
+	width: 23px;
+	height: 23px;
+	border: 2px solid #eef5df;
+	background-color: #FFBE05;
+	border-radius: 50%;
+	}
+.max::before, .min::after {
+  height: 13px;
+  width: 13px;
+  background-color: transparent;
+  border: 2px solid #eef5df;
+	position: absolute;
+	top: 3px;
+	left: 3.3px;
+	content: "";
+	display: none;
+  }
+  
+.max::before {
+	-ms-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	}
+ 
+.max:hover { cursor: pointer; }
+.max:hover::before { display: block; }
+ 
+.unmax {
+	position: relative;
+	width: 23px;
+	height: 23px;
+	border: 2px solid #eef5df;
+	background-color: #5bc0de;
+	border-radius: 50%;
+	}
+.unmax::before, .min::after {
+  height: 13px;
+  width: 13px;
+  background-color: transparent;
+  border: 2px solid #eef5df;
+	position: absolute;
+	top: 3px;
+	left: 3.3px;
+	content: "";
+	display: none;
+  }
+  
+.unmax::before {
+	-ms-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	}
+ 
+.unmax:hover { cursor: pointer; }
+.unmax:hover::before { display: block; }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Incoming Call</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <style>
+        body {
+          font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+          color: #404040;
+          background: #2a2a2a;
+        }
+
+        .card-style {
+          border: 1.2px solid rgba(171, 181, 184, 1);
+          box-shadow: 0px 1px 4px 0px rgba(85,95,99,0.2);
+        }
+        
+        /* 
+        .container {
+          margin: 10px auto;
+          width: 100%;
+          text-align: center;
+        }
+        
+        .container .progress {
+          margin: 0 auto;
+          width: 100%;
+        }
+        
+        .progress {
+          padding: 2px;
+          background: rgba(0, 0, 0, 0.25);
+          border-radius: 6px;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+        }
+        
+        .progress-bar {
+          height: 12px;
+          border-radius: 4px;
+          background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+          transition: 0.4s linear;
+          transition-property: width, background-color;
+          box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+        }
+           
+        .label {
+          display: inline-block;
+          margin: 0 5px 20px;
+          padding: 3px 8px;
+          text-shadow: 0 1px black;
+          border-radius: 3px;
+          cursor: pointer;
+          
+        }
+        */
+         
+      </style>
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style titlebar" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">Monster VoIP Desktop Phone</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-md-12" style="margin: 20px;">
+                      <img src="../MonsterVoip.png" style="width: 64px; height: 64px;" />
+                      <br>
+                      <b id="caller">Incomming Call from </b>
+                      <br>
+                      <p id="number" class="text-center"></p>
+                      <br>
+                        <button id="btnAccept" class="btn btn-success btn-ripple">Accept</button>
+                        <button id="btnDecline" class="btn btn-danger btn-ripple">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+     
+    <script>
+
+      const { remote } = require('electron');
+      var win = remote.BrowserWindow.getFocusedWindow();
+      const ipc = require('electron').ipcRenderer;
+      let authentication_token = "";
+      let calldetails = {};
+
+      
+     
+
+      $(document).ready(()=> {
+
+        ipc.on('calldetails', (event, message) => {
+            console.log('received call_details:', message);
+            calldetails = message;
+            createToken();
+        });
+
+        $('#caller').text('Incoming Call from ' + calldetails.orig_name);
+        $('#number').text(calldetails.ani);
+ 
+        $('#btnAccept').click(()=> {
+          let callid = calldetails.orig_callid;
+          let uid = calldetails.ani; // 340 caller
+          let destination = calldetails.term_user; // 349
+          acceptCall(authentication_token, callid, uid, destination);
+        });
+
+        $('#btnDecline').click(()=> {
+           window.close();
+        });
+
+      });
+
+      function createToken() {
+        const Store = require('./store.js');
+        const store = new Store({ configName: 'user-preferences'});
+        let { username, password } = store.get('credentials')
+
+        const axios = require('axios')
+        axios.get('https://login.monstervoip.com/ns-api/oauth2/token/', {
+          params: {
+              grant_type: 'password',
+              client_id: 'MonsterVoip',
+              client_secret: 'ff4a34b226670041c46adb20362a4d84',
+              username: username,
+              password: password,
+          }
+        }).then(response => {
+            if (response.data['access_token'].length) {
+                authentication_token = response.data['access_token'];
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+      }
+
+      function acceptCall(authorization, callid, uid,  destination) { 
+        const axios = require('axios')
+        axios.get('https://api.monstervoip.com/api/mvapi/answerIncomingCall', {
+            params: {
+                Authorization: 'Bearer ' + authorization,
+                callid: callid,
+                uid: uid,
+                destination: destination
+            }
+        }).then(response => {
+           // if (response.data['access_token'].length) {
+              console.log('accept call response: ', response);
+              //win.show(); 
+              //window.close();
+            //}
+        }).catch(error => {
+            console.log(error); 
+            window.close();
+        });
+      }
+    </script>
+  </body>
+</html>

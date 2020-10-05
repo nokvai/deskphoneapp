@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Apps</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">Monster VoIP Desktop Phone Apps</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+            <webview id="webview1"
+                src="https://login.monstervoip.com/portal" 
+                preload="preloadapps.js" 
+                style="position:relative;width:100%;height:90vh;" 
+                disablewebsecurity
+                webpreferences="nativeWindowOpen=yes" allowpopups>
+            </webview>
+            <webview id="webview2"
+                src="https://login.monstervoip.com/portal/attendant" 
+                preload="preloadapps.js" 
+                style="position:relative;width:100%;height:90vh;" 
+                disablewebsecurity
+                webpreferences="nativeWindowOpen=yes" allowpopups>
+            </webview>
+            <webview id="webview3"
+                src="https://login.monstervoip.com/video/" 
+                preload="preloadapps.js" 
+                style="position:relative;width:100%;height:90vh;" 
+                disablewebsecurity
+                webpreferences="nativeWindowOpen=yes" allowpopups>
+            </webview>
+        </div>
+      </div>
+      <div class="row" style="position: fixed; bottom: 0; width: 100%; padding: 10px; margin-top: 10px;">
+        <div class="col-12" style="text-align: center;">
+          <button id="btnPortal" class="btn btn-success btn-ripple">PBX Portal</button>
+          <button id="btnAttendant" class="btn btn-warning btn-ripple">Attendant Console</button>
+          <button id="btnMeeting" class="btn btn-primary btn-ripple">Meeting</button>
+        </div>
+      </div>
+    </div>
+    <script src="manipulateapps.js"></script>
+  </body>
+</html>

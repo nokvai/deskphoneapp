@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Auto Update</title>
+    <link rel="stylesheet" href="index.css">
+      <link rel="stylesheet" href="./contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <style>
+        body {
+          font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+          color: #404040;
+          background: #2a2a2a;
+        }
+
+        .card-style {
+          border: 1.2px solid rgba(171, 181, 184, 1);
+          box-shadow: 0px 1px 4px 0px rgba(85,95,99,0.2);
+        } 
+      </style>
+      <script>let $ = require('jquery');</script>
+      <script>require('popper.js');</script>
+      <script>require('bootstrap');</script>
+  </head>
+  <body style="overflow:hidden; background-color: transparent;">
+    <div class="container-fluid card-style titlebar" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+      <div class="row titlebar" style="display: none;">
+        <div class="col-6" style="padding: 4px; padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <img src="../MonsterVoip.png" style="width: 22px; height: 22px;" />
+          &nbsp;<b style="font-size: 12px; ">Monster VoIP Desktop Phone</b>
+        </div>
+        <div class="col-6" style="padding: 4px; padding-right: 8px;">
+          <button class="x" style="float: right; outline: none;"></button>
+          <button class="max" style="float: right; outline: none; display: none;"></button>
+          <button class="unmax" style="float: right; outline: none;"></button>
+          <button class="min" style="float: right; outline: none;"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding: 0;">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-md-12" style="margin: 20px;">
+                      <b>New version is available.</b>
+                      <p>Do you wish to exit and install update?</p>
+                        <!-- <div class="container">
+                            <label class="label">Signing In to Monster VoIP Desktop Phone...</label>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 0%;"></div>
+                            </div>
+                        </div>  -->
+                        <button id="btnUpdateNow" class="btn btn-success btn-ripple">Update Now</button>
+                        <button id="btnDelay" class="btn btn-danger btn-ripple">Delay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+     
+    <script> 
+      $(document).ready(()=> {
+        // renderer process
+        var ipcRenderer = require('electron').ipcRenderer;
+        ipcRenderer.on('update-data', function (event, store) {
+            console.log(store);
+        });
+
+        $('#btnUpdateNow').click(()=> {
+          window.close();
+        });
+
+        $('#btnDelay').click(()=> {
+          window.close();
+        });
+
+      }); 
+    </script>
+  </body>
+</html>

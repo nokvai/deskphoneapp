@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monster VoIP Desktop Phone</title>
+    <link rel="stylesheet" href="../index.css">
+ 
+    <link rel="stylesheet" href="../contents/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" 
+      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" 
+      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" 
+      crossorigin="anonymous">
+    <script>let $ = require('jquery');</script>
+    <script>require('popper.js');</script>
+    <script>require('bootstrap');</script>
+  </head>
+  <body style="background-color: transparent;">
+    <div class="container-fluid card-style" style="background-color: #fff; border-radius: 10px; height: 100vh;">
+        <div class="row titlebar" style="display: none;">
+            <div class="col-md-6" style="padding: 4px; padding-left: 8px; padding-right: 8px;">
+              <img src="./MonsterVoip.png" style="width: 22px; height: 22px;" />
+              &nbsp;<b style="font-size: 12px;">Monster VoIP Desktop Phone</b>
+              <button class="x" style="float: right; outline: none;"></button>
+              <button class="min" style="float: right; outline: none;"></button>
+            </div>
+          </div>
+        <div class="row" style="display: flex; justify-content: center; align-items: center;">
+            <div class="col-md-8"> 
+                <br>
+                <h5>Settings</h5>
+            </div>
+            <small id="wrong_credential" style="text-align: center; color: red; display: none;">Invalid <b>username</b> or <b>password</b></small>
+            <div class="col-md-4" style="text-align: center; padding: 10px;">
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+                        </div>
+                            <input type="text" id="username" name="username" placeholder="Username" class="form-control" aria-label="Username" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div> 
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                        </div>
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control" aria-label="Username" aria-describedby="inputGroup-sizing-default" data-toggle="password">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <a href="#" id="forgotpassword">Forgot Password</a> | 
+                    <a href="#" id="forgotlogin">Forgot Login</a> 
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3" style="display: none;">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-default">Theme</span>
+                        </div>
+                        <select class="form-control" name="theme" id="theme">
+                        </select>
+                    </div> 
+                   
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="checkStartup">&nbsp;Phone Open's on Startup</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="checkAutoSignin">&nbsp;Automatic Signin</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" id="checkAlwaysOnTop">&nbsp;Always on Top</label>
+                    </div>
+                   
+                    <br>
+                   
+                   
+                </div>
+                <div class="form-group" style="display: none;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-default">Microphone</span>
+                        </div>
+                        <select class="form-control" name="inputmedialist" id="inputmedialist">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-default">Speaker</span>
+                        </div>
+                        <select class="form-control" name="outputmedialist" id="outputmedialist">
+                        </select>
+                    </div>
+                </div> 
+               
+                <!-- <div class="form-group">
+                  <button id="btnSpeechToText" class="btn btn-success">Speech to Text</button>
+                </div> -->
+            </div>
+      </div>
+      <div class="row" style="position: fixed; bottom: 0; width: 100%; padding: 10px; margin-top: 10px;">
+        <div class="col-md-8" style="text-align: center; margin-bottom: 10px;">
+          <br>
+          <button id="btnSave" class="btn btn-success btn-ripple">Save</button>
+          <button id="btnClose" class="btn btn-primary btn-ripple">Close</button>
+        </div>
+      </div>
+    </div> 
+    <script src="../settings/settings.js"></script>
+   
+  </body>
+</html>
