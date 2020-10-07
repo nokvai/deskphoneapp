@@ -1,5 +1,6 @@
 const webview = document.querySelector('webview')
 const url = require('url')
+const path = require('path');
 const { remote, BrowserWindow } = require('electron')
 var win = remote.BrowserWindow.getFocusedWindow()
 let winPortal = null;
@@ -8,6 +9,7 @@ let winCallFlow = null;
 let winAutosignin = null;
 let winSettings = null;
 let winApps = null;
+let winIncomingCall = null;
 
 function setMaximized(b) {
   const bounds = remote.screen.getPrimaryDisplay().bounds;
@@ -102,8 +104,7 @@ webview.addEventListener('did-stop-loading', () => {
     if ((username == "" && password == "") || (username == null && password == null)) {
       createBrowserWindowSettings(true);
     }
-  
- 
+   
     console.log("DOM-Ready, triggering events !");
     webview.send("request");
     
@@ -214,7 +215,6 @@ function createBrowserWindowSettings(is_startup) {
       if (theme == null || theme == "") { theme = 'Default' }
       if (theme == 'Default') {
         winSettings = new BrowserWindow({
-           // height: 550,
             height: 450,
             width: 400,
             title: 'Monster VoIP Desktop Phone',
@@ -224,15 +224,10 @@ function createBrowserWindowSettings(is_startup) {
               nodeIntegrationInWorker: false,
               webSecurity: false,
               enableRemoteModule: true,
-            },
-            //resizable: false,
-            // frame: false,
-            // transparent: true,
-            // movable: true,
+            }
         });
       } else if (theme == 'Rounded-Border') {
           winSettings = new BrowserWindow({
-              // height: 550,
               height: 450,
               width: 400,
               title: 'Monster VoIP Desktop Phone',
@@ -300,10 +295,7 @@ function createBrowserWindowSettings(is_startup) {
                       const BrowserWindow = remote.BrowserWindow;
                       winAutosignin = new BrowserWindow({
                           webPreferences: {
-                            nodeIntegration: true,
-                            // webSecurity: false,
-                            // enableRemoteModule: true,
-                            //webviewTag: true, 
+                            nodeIntegration: true
                           },
                           width: 400,
                           height: 120,
@@ -330,16 +322,13 @@ function createBrowserWindowSettings(is_startup) {
     
                       store.set('autosignin_used', true)
                     }
-            //     } 
-            // }).catch(error => { console.log(error); });
- 
           }
-        winSettings = null;
+          winSettings = null;
       });
         // winSettings.webContents.openDevTools() // tools for settings
   }
 }
- 
+
 webview.addEventListener('ipc-message', (event, data) => {
   let bounce = event.channel;
   if (bounce == "signedin") {
@@ -348,8 +337,7 @@ webview.addEventListener('ipc-message', (event, data) => {
           $('.max').hide();
       }
       $('#btnSignin').text('Sign Out').removeClass('btn-primary').addClass('btn-danger');
-     
-      // navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      
       navigator.mediaDevices.getUserMedia({ audio: true})
       .then(function(stream) {
           console.log('You let me use your mic!')
@@ -361,7 +349,6 @@ webview.addEventListener('ipc-message', (event, data) => {
     } else if (bounce == "signout") {
       setTimeout(()=> {
         $('#btnSignin').text('Sign In').removeClass('btn-danger').addClass('btn-primary');
-        // setMaximized(false); 
       }, 3000);
  
     } else if (bounce == "portal_ok") { 
@@ -384,21 +371,13 @@ webview.addEventListener('ipc-message', (event, data) => {
               winPortal = new BrowserWindow({
                   webPreferences: {
                     nodeIntegration: true,
-                    // webSecurity: false,
-                    // enableRemoteModule: true,
                     webviewTag: true, 
-                  },
-                  // frame: false,
-                  // transparent: true,
-                  // movable: true,
-                  // maximizable: false,
+                  }
               })
             } else if (theme == 'Rounded-Border') {
                 winPortal = new BrowserWindow({
                     webPreferences: {
                       nodeIntegration: true,
-                      // webSecurity: false,
-                      // enableRemoteModule: true,
                       webviewTag: true, 
                     },
                     frame: false,
@@ -444,21 +423,13 @@ webview.addEventListener('ipc-message', (event, data) => {
                 winCallFlow = new BrowserWindow({
                     webPreferences: {
                       nodeIntegration: true,
-                      // webSecurity: false,
-                      // enableRemoteModule: true,
                       webviewTag: true, 
-                    },
-                    // frame: false,
-                    // transparent: true,
-                    // movable: true,
-                    // maximizable: false,
+                    }
                 })
               } else if (theme == 'Rounded-Border') {
                 winCallFlow = new BrowserWindow({
                       webPreferences: {
                         nodeIntegration: true,
-                        // webSecurity: false,
-                        // enableRemoteModule: true,
                         webviewTag: true, 
                       },
                       frame: false,
@@ -503,35 +474,19 @@ webview.addEventListener('ipc-message', (event, data) => {
             let theme = store.get('theme');
             if (theme == null || theme == "") { theme = 'Default' }
             if (theme == 'Default') {
-              winMeeting = new BrowserWindow({
-                  // alwaysOnTop: true,
-                  // width: 440,
-                  // height: 250, 
-                  // minWidth: 440,
-                  // minHeight: 300,
+              winMeeting = new BrowserWindow({ 
                   webPreferences: {
                       nodeIntegration: true,
-                      webSecurity: false,
-                      // enableRemoteModule: true,
+                      webSecurity: false, 
                       webviewTag: true, 
                   },
-                  resizable: true
-                  // frame: false,
-                  // transparent: true,
-                  // movable: true,
-                  // maximizable: false,
+                  resizable: true 
               })
             } else if (theme == 'Rounded-Border') {
-                winMeeting = new BrowserWindow({
-                    // alwaysOnTop: true,
-                    // width: 440,
-                    // height: 250, 
-                    // minWidth: 440,
-                    // minHeight: 300,
+                winMeeting = new BrowserWindow({ 
                     webPreferences: {
                         nodeIntegration: true,
                         webSecurity: false,
-                        // enableRemoteModule: true,
                         webviewTag: true, 
                     },
                     resizable: true,
@@ -543,20 +498,13 @@ webview.addEventListener('ipc-message', (event, data) => {
             }
 
             winMeeting.webContents.session.setPreloads([path.join(__dirname, 'preload-get-display-media-polyfill.js')])
-            // winMeeting.webContents.session.setPermissionCheckHandler(async (webContents, permission, details) => {
-            //   return true
-            // })
-            // winMeeting.webContents.session.setPermissionRequestHandler(async (webContents, permission, callback, details) => {
-            //   callback(true)
-            // })
- 
             winMeeting.setIcon(path.join(__dirname, 'MonsterVoip.png'))
             winMeeting.setMenu(null) 
             winMeeting.loadURL(url.format({
               pathname: path.join(__dirname, 'meeting.html'),
               protocol: 'file:'
             }));  
-              // winMeeting.webContents.openDevTools() // show meeting dev tool 
+            // winMeeting.webContents.openDevTools() // show meeting dev tool 
             winMeeting.on("close", (evt) => {
               evt.preventDefault(); 
               winMeeting = null;
@@ -587,20 +535,14 @@ webview.addEventListener('ipc-message', (event, data) => {
                     webPreferences: {
                       nodeIntegration: true,
                       webSecurity: false,
-                      // enableRemoteModule: true,
                       webviewTag: true, 
-                    },
-                    // frame: false,
-                    // transparent: true,
-                    // movable: true,
-                    // maximizable: false,
+                    }
                 })
               } else if (theme == 'Rounded-Border') {
                 winApps = new BrowserWindow({
                       webPreferences: {
                         nodeIntegration: true,
                         webSecurity: false,
-                        // enableRemoteModule: true,
                         webviewTag: true, 
                       },
                       frame: false,
@@ -610,14 +552,7 @@ webview.addEventListener('ipc-message', (event, data) => {
                   })
               }
 
-              winApps.webContents.session.setPreloads([path.join(__dirname, 'preload-get-display-media-polyfill.js')])
-              // winApps.webContents.session.setPermissionCheckHandler(async (webContents, permission, details) => {
-              //   return true
-              // })
-              // winApps.webContents.session.setPermissionRequestHandler(async (webContents, permission, callback, details) => {
-              //   callback(true)
-              // })
-
+              winApps.webContents.session.setPreloads([path.join(__dirname, 'preload-get-display-media-polyfill.js')]);
               const { Menu} = require('electron').remote;
               var menu = Menu.buildFromTemplate([
                 {
@@ -655,7 +590,6 @@ webview.addEventListener('ipc-message', (event, data) => {
               // winApps.webContents.openDevTools() // show portal dev tool 
               winApps.on("close", (evt) => {
                 evt.preventDefault();
-              
                 winApps = null;
               }); 
               winApps.maximize();
@@ -663,9 +597,56 @@ webview.addEventListener('ipc-message', (event, data) => {
           }
       } else if (bounce == "apps_failed") {
           winApps = null;
+      } else if (bounce == "incomingcall") {
+          if (!win.isVisible() || !win.isMaximized()) {
+            showIncomingCallDialog(event.args[0]);
+          }
       }
-    
 });
+
+const { ipcRenderer } = require('electron');
+ipcRenderer.on('call', (event, message) => { 
+    if (message == "accepted") {
+        webview.send("send-to-webphone", {call: {status: "accepted"}});
+    } else if (message == "declined") {
+        webview.send("send-to-webphone", {call: {status: "declined"}});
+    }
+});
+
+function showIncomingCallDialog(calldetails) {
+    if (winIncomingCall == null) {
+        const BrowserWindow = remote.BrowserWindow;
+        winIncomingCall = new BrowserWindow({
+            webPreferences: {
+                nodeIntegration: true, 
+            },
+            width: 380,
+            height: 220,
+            alwaysOnTop: true,
+            resizable: false,
+            frame: false,
+            transparent: true,
+            movable: true,
+            maximizable: false,
+            resizable: true
+        });
+        
+        winIncomingCall.setIcon(path.join(__dirname, 'MonsterVoip.png'))
+        winIncomingCall.setMenu(null)
+        winIncomingCall.loadURL(url.format({
+        pathname: path.join(__dirname, 'incomingcall.html'),
+            protocol: 'file:'
+        }));
+        //winIncomingCall.webContents.openDevTools() // show winIncomingCall dev tool 
+        winIncomingCall.on("close", (evt) => {
+            evt.preventDefault();
+            winIncomingCall = null;
+        });
+        winIncomingCall.webContents.on('did-finish-load', () => { 
+            winIncomingCall.webContents.send('calldetails', calldetails);
+        });
+    }
+}
 
 $('.min').click(()=> { win.minimize(); })
 

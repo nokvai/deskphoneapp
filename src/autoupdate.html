@@ -40,16 +40,12 @@
             <div class="container-fluid">
                 <div class="row text-center">
                     <div class="col-md-12" style="margin: 20px;">
+                      <img src="../MonsterVoip.png" style="width: 64px; height: 64px;" />
+                      <br>
                       <b>New version is available.</b>
-                      <p>Do you wish to exit and install update?</p>
-                        <!-- <div class="container">
-                            <label class="label">Signing In to Monster VoIP Desktop Phone...</label>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: 0%;"></div>
-                            </div>
-                        </div>  -->
-                        <button id="btnUpdateNow" class="btn btn-success btn-ripple">Update Now</button>
-                        <button id="btnDelay" class="btn btn-danger btn-ripple">Delay</button>
+                      <p>Do you wish to quit and install new version?</p>
+                        <button id="btnUpdateNow" class="btn btn-success">Update Now</button>
+                        <button id="btnDelay" class="btn btn-danger">Delay</button>
                     </div>
                 </div>
             </div>
@@ -59,18 +55,16 @@
      
     <script> 
       $(document).ready(()=> {
-        // renderer process
-        var ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.on('update-data', function (event, store) {
-            console.log(store);
-        });
-
+       
+        const { ipcRenderer } = require('electron')
         $('#btnUpdateNow').click(()=> {
-          window.close();
+            ipcRenderer.send('autoupdate-message', 'updatenow')
+            window.close();
         });
 
         $('#btnDelay').click(()=> {
-          window.close();
+            ipcRenderer.send('autoupdate-message', 'delay')
+            window.close();
         });
 
       }); 

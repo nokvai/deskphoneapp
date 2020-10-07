@@ -16,9 +16,8 @@ const path = require('path');
 var win = remote.BrowserWindow.getFocusedWindow()
 let authToken = '';
 let winAutosignin = null;
-let winIncomingCall = null;
- 
-function addNotificationOverride() { 
+
+function addNotificationOverride() {
     let authentication_token = "";
     const Store = require('./store.js');
     const store = new Store({ configName: 'user-preferences'});
@@ -40,161 +39,58 @@ function addNotificationOverride() {
         authentication_token = authToken;
     });
 
-    var Notification = function(title,ops) {
+    var Notification = function(title, ops) {
         var identity = username.split("@");
         var user = identity[0]; 
         var domain = identity[1];
         var last_call_detail_ani = "0";
-        // https://login.monstervoip.com/ns-api/
-        // BL_CLIENT_ID=MonsterVoip
-        // BL_CLIENT_SECRET=ff4a34b226670041c46adb20362a4d84
-        // https://login.monstervoip.com/ns-api/?format=json&object=call&action=read
         var source = new EventSource('https://api.monstervoip.com/api/mvapi/stream/' + domain + '/' + user + '/' + authentication_token); 
         source.onmessage = function(e) {
-           var str = e.data;  
+            var str = e.data;  
             if (str != "") {
                 var calldetails = JSON.parse(str)[0];
-                 if (calldetails.ani != last_call_detail_ani) {
-                    last_call_detail_ani = calldetails.ani
-                     //console.log('last_call_detail: ', last_call_detail_ani);
-                     //console.log('calldetails: ', calldetails);
-
+                if (calldetails.ani != last_call_detail_ani) {
+                    last_call_detail_ani = calldetails.ani;
                     if (calldetails.time_answer == "0000-00-00 00:00:00") {
-                        if (winIncomingCall == null) {
-                            const BrowserWindow = remote.BrowserWindow;
-                            winIncomingCall = new BrowserWindow({
-                                webPreferences: {
-                                    nodeIntegration: true,
-                                    // webSecurity: false,
-                                    // enableRemoteModule: true,
-                                    //webviewTag: true, 
-                                },
-                                width: 340,
-                                height: 200,
-                                alwaysOnTop: true,
-                                resizable: false,
-                                frame: false,
-                                transparent: true,
-                                movable: true,
-                                maximizable: false,
-                                resizable: true
-                            });
-                            
-                            winIncomingCall.setIcon(path.join(__dirname, 'MonsterVoip.png'))
-                            winIncomingCall.setMenu(null)
-                            winIncomingCall.loadURL(url.format({
-                            pathname: path.join(__dirname, 'incomingcall.html'),
-                                protocol: 'file:'
-                            }));
-                            winIncomingCall.webContents.openDevTools() // show winIncomingCall dev tool 
-                            winIncomingCall.on("close", (evt) => {
-                                evt.preventDefault();
-                                winIncomingCall = null;
-                            });
-
-                            // TODO: send ipc call_details
-                            winIncomingCall.webContents.on('did-finish-load', () => {
-                                winIncomingCall.webContents.send('calldetails', calldetails);
-                            });
-                        }
-
-                        //console.log(calldetails.ani);
-                        // let image_option = {width: 16, height: 16, quality: 'best'};
-                        // let image = nativeImage.createFromPath(path.join(__dirname, 'MonsterVoip.png')).resize(image_option);
-                        // if (process.platform == 'win32') { 
-                        //     console.log("Windows Notification")
-                        //     const WindowsToaster = require('node-notifier').WindowsToaster; 
-                        //     var notifierWindows = new WindowsToaster({
-                        //         withFallback: false, // Fallback to Growl or Balloons?
-                        //         customPath: void 0 // Relative/Absolute path if you want to use your fork of SnoreToast.exe
-                        //     });
-                        //     notifierWindows.notify({
-                        //         message: "Incoming Call from " +  calldetails.ani + "...",
-                        //         title: "Monster VoIP Desktop Phone",
-                        //         icon : image,
-                        //         sound: true, // Only Notification Center or Windows Toasters
-                        //         wait: true // Wait with callback, until user action is taken against notification
-                        //         }, function (err, response) {
-                        //         console.log(err, response);
-                        //             if(response =='activate' || response == 'timeout') {
-                        //             win.show();
-                        //             }
-                        //             if (response === undefined) {
-                        //                 win.show();
-                        //             }
-                        //         });
-                    
-                        //         notifierWindows.on('click', function (notifierObject, options) {
-                        //         // Triggers if `wait: true` and user clicks notification
-                        //         win.show();
-                        //         last_call_detail_ani = "0"
-                        //         });
-                        
-                        //         notifierWindows.on('timeout', function (notifierObject, options) {
-                        //         // Triggers if `wait: true` and notification closes
-                        //         win.show();
-                        //         });
-                
-                        // } else if (process.platform == 'darwin') {
-                        //     // Mac OS 
-                        //     console.log("Mac Notification Center")
-                        //     const NotificationCenter = require('node-notifier').NotificationCenter;
-                        //     var notifierMac = new NotificationCenter({
-                        //     withFallback: false, // Use Growl Fallback if <= 10.8
-                        //     customPath: undefined // Relative/Absolute path to binary if you want to use your own fork of terminal-notifier
-                        //     });
-                        //     notifierMac.notify({
-                        //     message: "Incoming Call from " +  calldetails.ani + "...",
-                        //         title: "Monster VoIP Desktop Phone",
-                        //         icon : image,
-                        //         subtitle: undefined,
-                        //         sound: false, // Case Sensitive string for location of sound file, or use one of macOS' native sounds (see below)
-                        //         contentImage: undefined, // Absolute Path to Attached Image (Content Image)
-                        //         open: undefined, // URL to open on Click
-                        //         wait: false, // Wait for User Action against Notification or times out. Same as timeout = 5 seconds
-                        //         // New in latest version. See `example/macInput.js` for usage
-                        //         // timeout: 5, // Takes precedence over wait if both are defined.
-                        //         closeLabel: undefined, // String. Label for cancel button
-                        //         actions: undefined, // String | Array<String>. Action label or list of labels in case of dropdown
-                        //         dropdownLabel: undefined, // String. Label to be used if multiple actions
-                        //         reply: false // Boolean. If notification should take input. Value passed as third argument in callback and event emitter.
-                        //     },
-                        //     function (err, response) {
-                        //         console.log(err, response);
-                        //         if(response =='activate' || response == 'timeout') {
-                        //             win.show();
-                        //         }
-                        //         if (response === undefined) {
-                        //             win.show();
-                        //         }
-                        //     }); 
-                
-                        //     notifierMac.on('click', function (notifierObject, options) {
-                        //         // Triggers if `wait: true` and user clicks notification
-                        //         win.show();
-                        //         last_call_detail_ani = "0"
-                        //     });
-                        
-                        //     notifierMac.on('timeout', function (notifierObject, options) {
-                        //         // Triggers if `wait: true` and notification closes
-                        //         win.show();
-                        //     });
-                        //     // Mac OS
-                        // }
-    
+                        ipcRenderer.sendToHost('incomingcall', calldetails);
                     }
-
-
-
-                } 
+                }
             }
         }
     };
 
     Notification.requestPermission = () => {};
     Notification.permission = "granted"; 
-    window.Notification = Notification; 
- 
+    window.Notification = Notification;
+}
+
+function showAutosigninDialog() {
+    const BrowserWindow = remote.BrowserWindow;
+    winAutosignin = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true, 
+        },
+        width: 400,
+        height: 120,
+        alwaysOnTop: true,
+        resizable: false,
+        frame: false,
+        transparent: true,
+        movable: true,
+        maximizable: false,
+    })
+
+        winAutosignin.setIcon(path.join(__dirname, 'MonsterVoip.png'))
+        winAutosignin.setMenu(null) 
+        winAutosignin.loadURL(url.format({
+        pathname: path.join(__dirname, 'autosignin.html'),
+        protocol: 'file:'
+    })); 
+    //winAutosignin.webContents.openDevTools() // show winAutosignin dev tool 
+    winAutosignin.on("close", (evt) => {
+        evt.preventDefault();
+        winAutosignin = null;
+    });  
 }
 
 ipcRenderer.on('request', function() {
@@ -212,37 +108,7 @@ ipcRenderer.on('request', function() {
  
         if ( store.get('autosignin_used') == false ) {
             if (store.get('autosignin')) {
-                if (!$('button[href="/webphone/logout"]').length > 0) { 
-                    const BrowserWindow = remote.BrowserWindow;
-                        winAutosignin = new BrowserWindow({
-                            webPreferences: {
-                            nodeIntegration: true,
-                            // webSecurity: false,
-                            // enableRemoteModule: true,
-                            //webviewTag: true, 
-                            },
-                            width: 400,
-                            height: 120,
-                            alwaysOnTop: true,
-                            resizable: false,
-                            frame: false,
-                            transparent: true,
-                            movable: true,
-                            maximizable: false,
-                        })
-                    
-                        winAutosignin.setIcon(path.join(__dirname, 'MonsterVoip.png'))
-                        winAutosignin.setMenu(null) 
-                        winAutosignin.loadURL(url.format({
-                        pathname: path.join(__dirname, 'autosignin.html'),
-                        protocol: 'file:'
-                        })); 
-                        //winAutosignin.webContents.openDevTools() // show winAutosignin dev tool 
-                        winAutosignin.on("close", (evt) => {
-                        evt.preventDefault();
-                        winAutosignin = null;
-                        });  
-
+                if (!$('button[href="/webphone/logout"]').length > 0) {
                         // var identity = username.split("@");
                         // var user = identity[0]; 
                         // var domain = identity[1];
@@ -276,10 +142,19 @@ ipcRenderer.on('request', function() {
                         //     }
                          
                         //     if (allow) {
+                            showAutosigninDialog();
+                            setTimeout(function() {
+                                login(username, password)
                                 setTimeout(function() {
-                                    login(username, password)
-                                }, 3000);
-                                store.set('autosignin_used', true)
+                                    if ($('form[name="loginForm"]').length == 0) {
+                                        ipcRenderer.sendToHost(returnLoginResult())
+                                    }
+                                }, 2500);
+                            }, 3000);
+                            
+                            store.set('autosignin_used', true)
+
+                                
 
                                
                         //     }
@@ -288,11 +163,7 @@ ipcRenderer.on('request', function() {
                 }
             }
         }
-        setTimeout(function() {
-            if ($('form[name="loginForm"]').length == 0) {
-                ipcRenderer.sendToHost(returnLoginResult())
-            }
-        }, 2500);
+        
     }, 3000) 
     
 });
@@ -372,9 +243,21 @@ ipcRenderer.on("send-to-webphone", function(event,data){
         console.log('data.apps start: ', data.apps)
         checkAppsCredential(data.apps.user_name, data.apps.pass_word)
     }
+
+    if (data.call) {
+        let $ = require('jquery');
+        if (data.call.status == "accepted") {
+            $('button[ng-click="$ctrl.answer(call)"]').click();
+            $('button[ng-click="$ctrl.answer(call)"]').trigger('click'); 
+        } else {
+            $('button[ng-click="$ctrl.reject(call)"]').click();
+            $('button[ng-click="$ctrl.reject(call)"]').trigger('click');
+        }
+    }
+
 });
 
-function returnLoginResult() { 
+function returnLoginResult() {
     let $ = require('jquery');
     setTimeout(() => {
         $('button[ng-click="$ctrl.next();"]').click();
